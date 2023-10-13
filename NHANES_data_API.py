@@ -107,3 +107,29 @@ class NHANESDataAPI:
             raise Exception("The variable table format has changed. Please update the code to match the new format.")
 
         return unique_descriptions
+    
+    def retrieve_cycle_data_file_name_mapping(self, variable_table, file_name):
+        """
+        Retrieve a dictionary of years and Data File Names based on a given "Data File Description."
+
+        Args:
+        data_file_description (str): The "Data File Description" to filter the variable table.
+
+        Returns:
+        dict: A dictionary mapping years to Data File Names.
+
+        Raises:
+        ValueError: If no data matches the provided "Data File Description."
+        """
+        filtered_data = variable_table[variable_table["Data File Description"] == file_name]
+
+        if filtered_data.empty:
+            raise ValueError(f"No data found for the specified 'Data File Description': {file_name}")
+
+        years_data_files_dict = {}
+        for index, row in filtered_data.iterrows():
+            years = row["Years"]
+            data_file_name = row["Data File Name"]
+            years_data_files_dict[years] = data_file_name
+
+        return years_data_files_dict
