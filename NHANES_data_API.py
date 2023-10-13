@@ -43,3 +43,67 @@ class NHANESDataAPI:
         """
         return data_category_list
 
+
+    def _retrieve_variable_table(self, data_category):
+        """
+        Retrieve the variable table for a specific data category.
+
+        Args:
+        data_category (str): The data category for which you want the variable table.
+
+        Returns:
+        pd.DataFrame: A pandas DataFrame containing the variable table.
+
+        Raises:
+        Exception: If there is an error fetching the variable table or if no data is available.
+        """
+        url = f"https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component={data_category}"
+
+        try:
+            variable_table = pd.read_html(url)[0]  # Assuming the table is the first one on the page
+        except (ValueError, IndexError):
+            raise Exception("Error fetching the variable table. Please check the data category or the website's format.")
+
+        # Perform data cleaning
+        if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
+            variable_table["Years"] = variable_table.apply(lambda row: f"{row['Begin Year']}-{row['EndYear']}", axis=1)
+            variable_table.drop(["Begin Year", "EndYear", "Component", "Use Constraints"], axis=1, inplace=True)
+            variable_table = variable_table.loc[variable_table["Years"].isin(cycle_list)]
+
+            if variable_table.empty:
+                raise Exception("No data available for the specified data category and cycle years.")
+
+            variable_table.reset_index(drop=True, inplace=True)
+        else:
+            raise Exception("The variable table format has changed. Please update the code to match the new format.")
+
+        return variable_table
+
+
+    def list_file_names(self, data_category):
+        """
+        Get a list of unique values in the 'Data File Description' column for a specific data category.
+
+        Args:
+        data_category (str): The data category for which you want to retrieve unique data file descriptions.
+
+        Returns:
+        list: A list of unique data file descriptions.
+
+        Raises:
+        Exception: If there is an error fetching the variable table, if no data is available, or if the data category is not recognized.
+        """
+        try:
+            variable_table = self._retrieve_variable_table(data_category)
+        except Exception as e:
+            raise Exception(f"Error while retrieving the variable table: {e}")
+
+        if variable_table is None:
+            raise Exception("No data available for the specified data category and cycle years.")
+
+        try:
+            unique_descriptions = variable_table["Data File Description"].unique().tolist()
+        except KeyError:
+            raise Exception("The variable table format has changed. Please update the code to match the new format.")
+
+        return unique_descriptions
