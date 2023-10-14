@@ -64,6 +64,7 @@ class NHANESDataAPI:
         Raises:
         Exception: If there is an error fetching the variable table or if no data is available.
         """
+
         url = f"https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component={data_category}"
 
         try:
@@ -83,6 +84,10 @@ class NHANESDataAPI:
             variable_table.reset_index(drop=True, inplace=True)
         else:
             raise Exception("The variable table format has changed. Please update the code to match the new format.")
+
+        # Replace 'Data File Description' with 'Demographic Variables & Sample Weights' if data_category is 'demographics'
+        if data_category == 'demographics':
+            variable_table['Data File Description'] = 'Demographic Variables & Sample Weights'
 
         return variable_table
 
@@ -185,8 +190,6 @@ class NHANESDataAPI:
             if end_year in cycle:
                 return list_of_cycles_to_be_worked_on
         return list_of_cycles_to_be_worked_on
-
-
 
 
     def _get_data_filename(self, data_category, cycle_year, data_file_description):
