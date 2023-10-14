@@ -222,16 +222,19 @@ class NHANESDataAPI:
 
     def common_variables(self, data_category, cycle_years):
         """
-        Find common variables across multiple cycle years for a specific data category and create a dictionary with variable-cycles mapping.
+        Find common and uncommon variables across multiple cycle years for a specific data category.
 
         Args:
         data_category (str): The data category for which data is requested.
         cycle_years (str or list of str): Either a single cycle year or a list of cycle years.
 
         Returns:
-        list: List of common variables.
-        list: List of uncommon variables.
-        dict: A dictionary of {variable: [cycles]}.
+        list: List of common variables found across the specified cycle years.
+        list: List of uncommon variables not found in all of the specified cycle years.
+        dict: A dictionary of {variable: [cycles]} showing which cycles each variable appears in.
+        
+        Raises:
+        ValueError: If the specified cycle years are invalid or if there is only one cycle specified.
         """
         if isinstance(cycle_years, str):
             cycle_years = [cycle_years]
@@ -278,8 +281,61 @@ class NHANESDataAPI:
         return common_variables, uncommon_variables, variable_cycles_dict
 
 
+    # def common_variables(self, data_category, cycle_years):
+    #     """
+    #     Find common and uncommon variables across multiple cycle years for a specific data category.
 
+    #     Args:
+    #     data_category (str): The data category for which data is requested.
+    #     cycle_years (str or list of str): Either a single cycle year or a list of cycle years.
 
+    #     Returns:
+    #     list: List of common variables found across the specified cycle years.
+    #     list: List of uncommon variables not found in all of the specified cycle years.
+    #     dict: A dictionary of {variable (Variable Description): [cycles]} showing which cycles each variable appears in.
+        
+    #     Raises:
+    #     ValueError: If the specified cycle years are invalid or if there is only one cycle specified.
+    #     """
+    #     if isinstance(cycle_years, str):
+    #         cycle_years = [cycle_years]
+
+    #     common_variables = None
+    #     variable_cycles_dict = {}
+    #     all_variables = list()  # Initialize a list for all variables
+    #     variable_table = self._retrieve_variable_table(data_category)  # Retrieve the variable table once
+
+    #     valid_cycles = list()
+    #     for cycle in cycle_years:
+    #         valid_cycles = valid_cycles + self._check_cycle(cycle)
+
+    #     if valid_cycles == []:
+    #         raise ValueError(f"You have entered an Invalid cycle. Below is a list of valid cycles: \n {self.cycle_list}")
+
+    #     if len(valid_cycles) < 2:
+    #         raise ValueError("There is only one cycle here. This function can only be performed for 2 or more cycle years.")
+
+    #     for valid_cycle in valid_cycles:
+    #         variables = [(row['Variable Name'] + ' (' + row['Variable Description'] + ')') for index, row in variable_table.iterrows() if row['Years'] == valid_cycle]
+
+    #         if common_variables is None:
+    #             common_variables = set(variables)
+    #         else:
+    #             common_variables.intersection_update(variables)
+
+    #         for variable in variables:
+    #             if variable in variable_cycles_dict:
+    #                 variable_cycles_dict[variable].append(valid_cycle)
+    #             else:
+    #                 variable_cycles_dict[variable] = [valid_cycle]
+
+    #         all_variables = all_variables + variables
+
+    #     common_variables = list(common_variables)
+    #     all_variables = list(set(all_variables))
+    #     uncommon_variables = [variable for variable in all_variables if variable not in common_variables]
+
+    #     return common_variables, uncommon_variables, variable_cycles_dict
 
 
 
