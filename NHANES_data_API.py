@@ -340,7 +340,7 @@ class NHANESDataAPI:
 
 
 
-    def retrieve_data(self, data_category, cycle, filename):
+    def retrieve_data(self, data_category, cycle, filename, include_uncommon_variables=True):
         """
         Retrieve data for a specific data category, cycle year(s), and data file description.
 
@@ -348,6 +348,7 @@ class NHANESDataAPI:
         data_category (str): The data category for which data is requested.
         cycle (str or list): The year or cycle(s) for which data is requested.
         filename (str): The data file description.
+        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the concatenated data.
 
         Returns:
         pd.DataFrame: The retrieved data as a pandas DataFrame containing concatenated data from multiple cycles.
@@ -361,10 +362,17 @@ class NHANESDataAPI:
 
         data_frames = []  # List to store individual data frames from different cycles
 
+        common_variables, uncommon_variables, _ = self.common_variables(data_category, cycle_list)
+
         for cycle_year in cycle_list:
             try:
                 data_file_name = self._get_data_filename(data_category, cycle_year, filename)
                 data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_year}/{data_file_name}.XPT")
+                
+                # Include or exclude uncommon variables based on the parameter
+                if include_uncommon_variables == False:
+                    data = data[common_variables]
+
                 data_frames.append(data)
             except Exception as e:
                 raise ValueError(f"Error fetching data for cycle {cycle_year}: {str(e)}")
