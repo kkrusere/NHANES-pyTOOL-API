@@ -3,17 +3,17 @@ import pandas as pd
 
 class NHANESDataAPI:
     cycle_list = [
-    '1999-2000',
-    '2001-2002',
-    '2003-2004',
-    '2005-2006',
-    '2007-2008',
-    '2009-2010',
-    '2011-2012',
-    '2013-2014',
-    '2015-2016',
-    '2017-2018'
-]
+        '1999-2000',
+        '2001-2002',
+        '2003-2004',
+        '2005-2006',
+        '2007-2008',
+        '2009-2010',
+        '2011-2012',
+        '2013-2014',
+        '2015-2016',
+        '2017-2018'
+    ]
 
     data_category_list = [
         "demographics",
@@ -216,24 +216,36 @@ class NHANESDataAPI:
             raise ValueError(f"No data file found for Data Category: {data_category}, Year: {cycle_year}, Data File Description: {data_file_description}")
 
 
+
     def retrieve_data(self, data_category, cycle, filename):
         """
-        Retrieve data for a specific data category, cycle year, and data file description.
+        Retrieve data for a specific data category, cycle year(s), and data file description.
 
         Args:
         data_category (str): The data category for which data is requested.
-        cycle (str): The year or cycle for which data is requested.
+        cycle (str or list): The year or cycle(s) for which data is requested.
         filename (str): The data file description.
 
         Returns:
-        pd.DataFrame: The retrieved data as a pandas DataFrame.
+        pd.DataFrame: The retrieved data as a pandas DataFrame containing concatenated data from multiple cycles.
         
         Raises:
         ValueError: If there is an error fetching the data or if no data is available.
         """
-        try:
-            data_file_name = self._get_data_filename(data_category, cycle, filename)
-            data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle}/{data_file_name}.XPT")
-            return data
-        except Exception as e:
-            raise ValueError(f"Error fetching data: {str(e)}")
+        cycle_list = self._check_cycle(cycle)
+        if not cycle_list:
+            raise ValueError("Invalid cycle input.")
+
+        data_frames = []  # List to store individual data frames from different cycles
+
+        for cycle_year in cycle_list:
+            try:
+                data_file_name = self._get_data_filename(data_category, cycle_year, filename)
+                data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_year}/{data_file_name}.XPT")
+                data_frames.append(data)
+            except Exception as e:
+                raise ValueError(f"Error fetching data for cycle {cycle_year}: {str(e)}")
+
+        # Concatenate data frames from different cycles
+        concatenated_data = pd.concat(data_frames, ignore_index=True)
+        return concatenated_data
