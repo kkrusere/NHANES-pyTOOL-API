@@ -277,8 +277,6 @@ class NHANESDataAPI:
             raise ValueError("There is only one cycle here. This function can only be performed for 2 or more cycle years.")
 
         for valid_cycle in valid_cycles:
-            print("Valid Cycle:", valid_cycle)
-            print("Variable Table Columns:", variable_table.columns)
             variables = [row['Variable Name'] for index, row in variable_table.iterrows() if row['Years'] == valid_cycle]
 
 
@@ -361,48 +359,44 @@ class NHANESDataAPI:
 
 
 
-
-    def retrieve_data(self, data_category, cycle, filename, include_uncommon_variables=True):
+    def _retrieve_variable_table(self, data_category):
         """
-        Retrieve data for a specific data category, cycle year(s), and data file description.
+        Retrieve the variable table for a specific data category.
 
         Args:
-        data_category (str): The data category for which data is requested.
-        cycle (str or list): The year or cycle(s) for which data is requested.
-        filename (str): The data file description.
-        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the concatenated data.
+        data_category (str): The data category for which you want the variable table.
 
         Returns:
-        pd.DataFrame: The retrieved data as a pandas DataFrame containing concatenated data from multiple cycles.
-        
+        pd.DataFrame: A pandas DataFrame containing the variable table.
+
         Raises:
-        ValueError: If there is an error fetching the data or if no data is available.
+        Exception: If there is an error fetching the variable table, no tables are found, or the website's format has changed.
         """
-        cycle_list = self._check_cycle(cycle)
-        if not cycle_list:
-            raise ValueError("Invalid cycle input.")
+        url = f"https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component={data_category}"
 
-        data_frames = []  # List to store individual data frames from different cycles
+        try:
+            variable_table = pd.read_html(url)[0]  # Assuming the table is the first one on the page
+        except (ValueError, IndexError):
+            raise Exception("Error fetching the variable table. No tables found or website format changed. Please check the data category or the website's format.")
 
-        common_variables, uncommon_variables, _ = self.common_variables(data_category, cycle_list)
+        # Perform data cleaning
+        if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
+            variable_table["Years"] = variable_table.apply(lambda row: f"{row['Begin Year']}-{row['EndYear']}", axis=1)
+            variable_table.drop(["Begin Year", "EndYear", "Component", "Use Constraints"], axis=1, inplace=True)
+            variable_table = variable_table.loc[variable_table["Years"].isin(self.cycle_list)]
 
-        for cycle_year in cycle_list:
-            try:
-                data_file_name = self._get_data_filename(data_category, cycle_year, filename)
-                data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_year}/{data_file_name}.XPT")
-                
-                # Include or exclude uncommon variables based on the parameter
-                if include_uncommon_variables == False:
-                    data = data[common_variables]
+            if variable_table.empty:
+                raise Exception("No data available for the specified data category and cycle years.")
 
-                data_frames.append(data)
-            except Exception as e:
-                raise ValueError(f"Error fetching data for cycle {cycle_year}: {str(e)}")
+            variable_table.reset_index(drop=True, inplace=True)
+        else:
+            raise Exception("The variable table format has changed. Please update the code to match the new format.")
 
-        # Concatenate data frames from different cycles
-        concatenated_data = pd.concat(data_frames, ignore_index=True)
-        return concatenated_data
+        # Replace 'Data File Description' with 'Demographic Variables & Sample Weights' if data_category is 'demographics'
+        if data_category == 'demographics':
+            variable_table['Data File Description'] = 'Demographic Variables & Sample Weights'
 
+        return variable_table
 
 
     def join_data_files(self, cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True):
