@@ -152,37 +152,59 @@ class NHANESDataAPI:
         Check the validity of a cycle and return valid cycle(s) based on input.
 
         Args:
-        input_cycle (str): The input cycle year or range.
+        input_cycle (str or list): The input cycle year(s), range(s), or list of valid cycles.
 
         Returns:
         list: List of valid cycle(s) based on input.
-        """
-        if '-' in input_cycle:
-            start_year, end_year = input_cycle.split('-')
-            the_cycle_list = self._check_in_between_cycle(start_year, end_year, self.cycle_list)
-            return the_cycle_list
-        elif input_cycle in self.cycle_list:
-            return [input_cycle]
-        elif any(input_cycle in cycles for cycles in self.cycle_list):
-            return [cycle for cycle in self.cycle_list if input_cycle in cycle]
-        else:
-            return []
 
-    def _check_in_between_cycle(self, start_year, end_year, cycle_list):
+        Acceptable input formats:
+        - Single cycle year as a string, e.g., '2005'
+        - List of single cycle years, e.g., ['2005', '2007']
+        - Cycle range in the form 'start_year'-'end_year', e.g., '2005'-'2006'
+        - List of cycle ranges, e.g., ['2005'-'2006', '2007'-'2008']
+
+        Returns a list of valid cycle years or an empty list if the input is not recognized.
+        """
+        the_new_cycle_list_to_use = list()
+
+        if isinstance(input_cycle, list):
+            for element in input_cycle:
+                if element in self.cycle_list:
+                    the_new_cycle_list_to_use.append(element)
+                elif '-' in element:
+                    start_year, end_year = element.split('-')
+                    the_new_cycle_list_to_use.extend(self._check_in_between_cycle(start_year, end_year))
+                else:
+                    the_new_cycle = self._check_cycle(element)
+                    if the_new_cycle:
+                        the_new_cycle_list_to_use.extend(the_new_cycle)
+                    else:
+                        return []
+
+            return the_new_cycle_list_to_use
+
+        if isinstance(input_cycle, str):
+            if input_cycle in self.cycle_list:
+                the_new_cycle_list_to_use = [input_cycle]
+                return the_new_cycle_list_to_use
+            else:
+                return [cycle for cycle in self.cycle_list if input_cycle in cycle]
+
+        return []
+
+    def _check_in_between_cycle(self, start_year, end_year, ):
         """
         Check for valid cycles within a range.
 
         Args:
         start_year (str): The start year of the range.
         end_year (str): The end year of the range.
-        cycle_list (list): List of available cycle years.
-
         Returns:
         list: List of valid cycle(s) within the range.
         """
         list_of_cycles_to_be_worked_on = []
         flager = 0
-        for cycle in cycle_list:
+        for cycle in self.cycle_list:
             if start_year in cycle:
                 flager = 1
             if flager == 1:
