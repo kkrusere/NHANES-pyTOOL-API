@@ -380,3 +380,37 @@ class NHANESDataAPI:
         # Concatenate data frames from different cycles
         concatenated_data = pd.concat(data_frames, ignore_index=True)
         return concatenated_data
+
+
+
+    def join_data_files(self, cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True):
+        """
+        Join two data files from specified data categories and file names based on the common variable SEQN.
+
+        Args:
+        cycle_year (str): The year or cycle for which data is requested.
+        data_category1 (str): The first data category for the first file.
+        file_name1 (str): The data file description for the first file.
+        data_category2 (str): The second data category for the second file.
+        file_name2 (str): The data file description for the second file.
+        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the joined data.
+
+        Returns:
+        pd.DataFrame: The joined data as a pandas DataFrame.
+
+        Raises:
+        ValueError: If there is an error fetching the data or if no data is available.
+        """
+        try:
+            # Retrieve data for the first data file
+            data1 = self.retrieve_data(data_category1, cycle_year, file_name1, include_uncommon_variables)
+            
+            # Retrieve data for the second data file
+            data2 = self.retrieve_data(data_category2, cycle_year, file_name2, include_uncommon_variables)
+            
+            # Perform inner join on the common variable SEQN
+            joined_data = pd.merge(data1, data2, on='SEQN', how='inner')
+            
+            return joined_data
+        except Exception as e:
+            raise ValueError(f"Error while joining data files: {str(e)}")
