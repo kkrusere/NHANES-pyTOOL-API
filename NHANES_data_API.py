@@ -251,7 +251,7 @@ class NHANESDataAPI:
 
 
 
-    def common_variables(self, data_category, cycle_years):
+    def get_common_and_uncommon_variables(self, data_category, cycle_years):
         """
         Find common and uncommon variables across multiple cycle years for a specific data category.
 
@@ -262,7 +262,7 @@ class NHANESDataAPI:
         Returns:
         list: List of common variables found across the specified cycle years.
         list: List of uncommon variables not found in all of the specified cycle years.
-        dict: A dictionary of {variable: [cycles]} showing which cycles each variable appears in.
+        dict: A dictionary of {variable (Variable Description): [cycles]} showing which cycles each variable appears in.
         
         Raises:
         ValueError: If the specified cycle years are invalid or if there is only one cycle specified.
@@ -310,7 +310,7 @@ class NHANESDataAPI:
         return common_variables, uncommon_variables, variable_cycles_dict
 
 
-    # def common_variables(self, data_category, cycle_years):
+    # def get_common_and_uncommon_variables(self, data_category, cycle_years):
     #     """
     #     Find common and uncommon variables across multiple cycle years for a specific data category.
 
@@ -366,6 +366,8 @@ class NHANESDataAPI:
 
     #     return common_variables, uncommon_variables, variable_cycles_dict
 
+
+
     def retrieve_data(self, data_category, cycle, filename, include_uncommon_variables=True):
         """
         Retrieve data for a specific data category, cycle year(s), and data file description.
@@ -397,7 +399,7 @@ class NHANESDataAPI:
 
         data_frames = []  # List to store individual data frames from different cycles
 
-        common_variables, uncommon_variables, _ = self.common_variables(data_category, cycle_list)
+        common_variables, uncommon_variables, _ = self.get_common_and_uncommon_variables(data_category, cycle_list)
 
         for cycle_year in cycle_list:
             try:
@@ -423,8 +425,6 @@ class NHANESDataAPI:
         # Concatenate data frames from different cycles
         concatenated_data = pd.concat(data_frames, ignore_index=True)
         return concatenated_data
-    
-
 
 
     def join_data_files(self, cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True):
