@@ -174,56 +174,43 @@ class NHANESDataAPI:
 
         Returns a list of valid cycle years or an empty list if the input is not recognized.
         """
-        the_new_cycle_list_to_use = list()
+        valid_cycles = []
 
         if isinstance(input_cycle, list):
             for element in input_cycle:
-                if element in self.cycle_list:
-                    the_new_cycle_list_to_use.append(element)
-                elif '-' in element:
-                    start_year, end_year = element.split('-')
-                    the_new_cycle_list_to_use.extend(self._check_in_between_cycle(start_year, end_year))
-                else:
-                    the_new_cycle = self._check_cycle(element)
-                    if the_new_cycle:
-                        the_new_cycle_list_to_use.extend(the_new_cycle)
-                    else:
-                        return []
+                valid_cycles.extend(self._check_cycle(element))
+        elif isinstance(input_cycle, str):
+            if '-' in input_cycle:
+                start_year, end_year = input_cycle.split('-')
+                valid_cycles.extend(self._check_in_between_cycle(start_year, end_year))
+            elif input_cycle in self.cycle_list:
+                valid_cycles.append(input_cycle)
 
-            return the_new_cycle_list_to_use
+        return valid_cycles
 
-        if isinstance(input_cycle, str):
-            for cycle in self.cycle_list:
-                if input_cycle in cycle:
-                    return [cycle]
-            if input_cycle in self.cycle_list:
-                the_new_cycle_list_to_use = [input_cycle]
-                return the_new_cycle_list_to_use
-            else:
-                return self._check_cycle([input_cycle])
-
-        return []
-
-    def _check_in_between_cycle(self, start_year, end_year, ):
+    def _check_in_between_cycle(self, start_year, end_year):
         """
         Check for valid cycles within a range.
 
         Args:
         start_year (str): The start year of the range.
         end_year (str): The end year of the range.
+
         Returns:
         list: List of valid cycle(s) within the range.
         """
-        list_of_cycles_to_be_worked_on = []
-        flager = 0
+        valid_cycles = []
+        found_start = False
+
         for cycle in self.cycle_list:
             if start_year in cycle:
-                flager = 1
-            if flager == 1:
-                list_of_cycles_to_be_worked_on.append(cycle)
+                found_start = True
+            if found_start:
+                valid_cycles.append(cycle)
             if end_year in cycle:
-                return list_of_cycles_to_be_worked_on
-        return list_of_cycles_to_be_worked_on
+                break
+
+        return valid_cycles
 
 
     def _get_data_filename(self, data_category, cycle_year, data_file_description):
