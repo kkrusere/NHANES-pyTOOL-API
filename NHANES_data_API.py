@@ -51,6 +51,13 @@ class NHANESDataAPI:
         """
         return self.cycle_list
 
+
+
+
+
+
+
+
     def _retrieve_variable_table(self, data_category):
         """
         Retrieve the variable table for a specific data category.
@@ -59,27 +66,27 @@ class NHANESDataAPI:
         data_category (str): The data category for which you want the variable table.
 
         Returns:
-        pd.DataFrame: A pandas DataFrame containing the variable table.
+        pd.DataFrame: A pandas DataFrame containing the variable table or None if no table is found.
 
         Raises:
-        Exception: If there is an error fetching the variable table or if no data is available.
+        Exception: If there is an error fetching the variable table or if the website's format has changed.
         """
-
         url = f"https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component={data_category}"
 
         try:
             variable_table = pd.read_html(url)[0]  # Assuming the table is the first one on the page
         except (ValueError, IndexError):
-            raise Exception("Error fetching the variable table. Please check the data category or the website's format.")
+            # If no tables are found, return None
+            return None
 
-        # Perform data cleaning
         if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
             variable_table["Years"] = variable_table.apply(lambda row: f"{row['Begin Year']}-{row['EndYear']}", axis=1)
             variable_table.drop(["Begin Year", "EndYear", "Component", "Use Constraints"], axis=1, inplace=True)
             variable_table = variable_table.loc[variable_table["Years"].isin(self.cycle_list)]
 
             if variable_table.empty:
-                raise Exception("No data available for the specified data category and cycle years.")
+                # If no matching cycle years are found, return None
+                return None
 
             variable_table.reset_index(drop=True, inplace=True)
         else:
@@ -90,6 +97,8 @@ class NHANESDataAPI:
             variable_table['Data File Description'] = 'Demographic Variables & Sample Weights'
 
         return variable_table
+
+
 
 
     def list_file_names(self, data_category):
@@ -184,11 +193,14 @@ class NHANESDataAPI:
             return the_new_cycle_list_to_use
 
         if isinstance(input_cycle, str):
+            for cycle in self.cycle_list:
+                if input_cycle in cycle:
+                    return [cycle]
             if input_cycle in self.cycle_list:
                 the_new_cycle_list_to_use = [input_cycle]
                 return the_new_cycle_list_to_use
             else:
-                return [cycle for cycle in self.cycle_list if input_cycle in cycle]
+                return self._check_cycle([input_cycle])
 
         return []
 
@@ -236,9 +248,6 @@ class NHANESDataAPI:
             return data_file_name
         except IndexError:
             raise ValueError(f"No data file found for Data Category: {data_category}, Year: {cycle_year}, Data File Description: {data_file_description}")
-
-
-
 
 
 
@@ -357,46 +366,65 @@ class NHANESDataAPI:
 
     #     return common_variables, uncommon_variables, variable_cycles_dict
 
-
-
-    def _retrieve_variable_table(self, data_category):
+    def retrieve_data(self, data_category, cycle, filename, include_uncommon_variables=True):
         """
-        Retrieve the variable table for a specific data category.
+        Retrieve data for a specific data category, cycle year(s), and data file description.
 
         Args:
-        data_category (str): The data category for which you want the variable table.
+        data_category (str): The data category for which data is requested.
+        cycle (str or list): The year or cycle(s) for which data is requested.
+        filename (str): The data file description.
+        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the concatenated data.
 
         Returns:
-        pd.DataFrame: A pandas DataFrame containing the variable table.
+        pd.DataFrame: The retrieved data as a pandas DataFrame containing concatenated data from multiple cycles.
+        The DataFrame will include a 'year' column indicating the cycle year for each row.
 
         Raises:
-        Exception: If there is an error fetching the variable table, no tables are found, or the website's format has changed.
+        ValueError: If there is an error fetching the data or if no data is available.
         """
-        url = f"https://wwwn.cdc.gov/nchs/nhanes/search/variablelist.aspx?Component={data_category}"
+        cycle_list = self._check_cycle(cycle)
+        if not cycle_list:
+            raise ValueError("Invalid cycle input.")
+        
+        if len(cycle_list) == 1:
+            data_file_name = self._get_data_filename(data_category, cycle_list[0], filename)
+            if data_file_name is None:
+                raise ValueError(f"No data file found for Data Category: {data_category}, Year: {cycle_list[0]}, Data File Description: {filename}")
+            data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_list[0]}/{data_file_name}.XPT")
+            data['year'] = cycle_list[0]
+            return data
 
-        try:
-            variable_table = pd.read_html(url)[0]  # Assuming the table is the first one on the page
-        except (ValueError, IndexError):
-            raise Exception("Error fetching the variable table. No tables found or website format changed. Please check the data category or the website's format.")
+        data_frames = []  # List to store individual data frames from different cycles
 
-        # Perform data cleaning
-        if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
-            variable_table["Years"] = variable_table.apply(lambda row: f"{row['Begin Year']}-{row['EndYear']}", axis=1)
-            variable_table.drop(["Begin Year", "EndYear", "Component", "Use Constraints"], axis=1, inplace=True)
-            variable_table = variable_table.loc[variable_table["Years"].isin(self.cycle_list)]
+        common_variables, uncommon_variables, _ = self.common_variables(data_category, cycle_list)
 
-            if variable_table.empty:
-                raise Exception("No data available for the specified data category and cycle years.")
+        for cycle_year in cycle_list:
+            try:
+                data_file_name = self._get_data_filename(data_category, cycle_year, filename)
+                if data_file_name is None:
+                    continue  # Skip this cycle if the data file name is not found
+                data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_year}/{data_file_name}.XPT")
+                
+                # Include or exclude uncommon variables based on the parameter
+                if include_uncommon_variables is False:
+                    data = data[common_variables]
 
-            variable_table.reset_index(drop=True, inplace=True)
-        else:
-            raise Exception("The variable table format has changed. Please update the code to match the new format.")
+                # Add a 'year' column indicating the cycle year
+                data['year'] = cycle_year
 
-        # Replace 'Data File Description' with 'Demographic Variables & Sample Weights' if data_category is 'demographics'
-        if data_category == 'demographics':
-            variable_table['Data File Description'] = 'Demographic Variables & Sample Weights'
+                data_frames.append(data)
+            except Exception as e:
+                raise ValueError(f"Error fetching data for cycle {cycle_year}: {str(e)}")
 
-        return variable_table
+        if not data_frames:
+            raise ValueError(f"No data available for the specified data category and cycle years.")
+        
+        # Concatenate data frames from different cycles
+        concatenated_data = pd.concat(data_frames, ignore_index=True)
+        return concatenated_data
+    
+
 
 
     def join_data_files(self, cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True):
