@@ -1,5 +1,4 @@
 import unittest
-from unittest.mock import patch
 import pandas as pd
 
 from NHANES_data_API import NHANESDataAPI
@@ -60,10 +59,10 @@ class TestNHANESDataAPI(unittest.TestCase):
         result = self.api._check_cycle(input_cycle)
         self.assertEqual(result, expected_output)
 
-    def test_common_variables(self):
+    def test_common_and_uncommon_variables(self):
         data_category = "demographics"
         cycle_years = ['2009-2010', '2011-2012']
-        common, uncommon, variable_cycles_dict = self.api.common_variables(data_category, cycle_years)
+        common, uncommon, variable_cycles_dict = self.api.get_common_and_uncommon_variables(data_category, cycle_years)
         self.assertIsInstance(common, list)
         self.assertIsInstance(uncommon, list)
         self.assertIsInstance(variable_cycles_dict, dict)
@@ -85,7 +84,6 @@ class TestNHANESDataAPI(unittest.TestCase):
             file_name = "Demographic Variables & Sample Weights"
             cycle = '2005-2006'
             self.api._get_data_filename(data_category, cycle, file_name)
-
 
     def test_retrieve_data_valid(self):
         data_category = "examination"
@@ -129,6 +127,18 @@ class TestNHANESDataAPI(unittest.TestCase):
         file_name2 = "invalid_file_name"
         with self.assertRaises(ValueError):
             self.api.join_data_files(cycle, data_category1, file_name1, data_category2, file_name2)
+
+    def test_data_retrieval_for_specific_variables(self):
+        data_category = "laboratory"
+        cycle = "2017-2018"
+        file_name = "Laboratory and Examination Data"
+        include_uncommon = True
+        # Specify specific variables to retrieve
+        specific_variables = ['SEQN', 'LBXCRP', 'LBXGH']
+        data = self.api.retrieve_data(data_category, cycle, file_name, include_uncommon, specific_variables)
+        self.assertIsInstance(data, pd.DataFrame)
+        self.assertTrue(len(data) > 0)
+        self.assertTrue(all(variable in data.columns for variable in specific_variables))
 
 if __name__ == '__main__':
     unittest.main()

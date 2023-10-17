@@ -101,15 +101,16 @@ class NHANESDataAPI:
 
 
 
-    def list_file_names(self, data_category):
+    def list_file_names(self, data_category, cycle_years=None):
         """
-        Get a list of unique values in the 'Data File Description' column for a specific data category.
+        Get a list of unique values in the 'Data File Description' column for a specific data category and optional cycle years.
 
         Args:
         data_category (str): The data category for which you want to retrieve unique data file descriptions.
+        cycle_years (str or list of str, optional): The specific year-cycles to filter the variable table. If not specified, all available cycles are considered.
 
         Returns:
-        list: A list of unique data file descriptions.
+        list: A list of unique data file descriptions for the specified data category and cycle years.
 
         Raises:
         Exception: If there is an error fetching the variable table, if no data is available, or if the data category is not recognized.
@@ -122,6 +123,14 @@ class NHANESDataAPI:
         if variable_table is None:
             raise Exception("No data available for the specified data category and cycle years.")
 
+        if cycle_years is not None:
+            # Filter the variable table based on specified year-cycles
+            valid_cycles = self._check_cycle(cycle_years)
+            variable_table = variable_table[variable_table['Years'].isin(valid_cycles)]
+
+            if variable_table.empty:
+                raise Exception("No data available for the specified data category and cycle years.")
+
         try:
             unique_descriptions = variable_table["Data File Description"].unique().tolist()
         except KeyError:
@@ -129,6 +138,8 @@ class NHANESDataAPI:
 
         return unique_descriptions
     
+
+
     def retrieve_cycle_data_file_name_mapping(self, variable_table, file_name):
         """
         Retrieve a dictionary of years and Data File Names based on a given "Data File Description."
@@ -413,7 +424,6 @@ class NHANESDataAPI:
         concatenated_data = pd.concat(data_frames, ignore_index=True)
         return concatenated_data
 
-
     def join_data_files(self, cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True):
         """
         Join two data files from specified data categories and file names based on the common variable SEQN.
@@ -430,9 +440,18 @@ class NHANESDataAPI:
         pd.DataFrame: The joined data as a pandas DataFrame.
 
         Raises:
-        ValueError: If there is an error fetching the data or if no data is available.
+        ValueError: If there is an error fetching the data, if the specified data file names are not available, or if no data is available.
         """
         try:
+            # Check if the specified data file names are available in the given cycle year
+            data_file_names1 = self.list_data_file_names(data_category1, cycle_year)
+            data_file_names2 = self.list_data_file_names(data_category2, cycle_year)
+            
+            if file_name1 not in data_file_names1:
+                raise ValueError(f"Data file name '{file_name1}' is not available in the specified cycle year '{cycle_year}' for data category '{data_category1}'.")
+            if file_name2 not in data_file_names2:
+                raise ValueError(f"Data file name '{file_name2}' is not available in the specified cycle year '{cycle_year}' for data category '{data_category2}'.")
+            
             # Retrieve data for the first data file
             data1 = self.retrieve_data(data_category1, cycle_year, file_name1, include_uncommon_variables)
             
@@ -441,6 +460,9 @@ class NHANESDataAPI:
             
             # Perform inner join on the common variable SEQN
             joined_data = pd.merge(data1, data2, on='SEQN', how='inner')
+            
+            # Drop the 'year_x' and 'year_y' columns
+            joined_data = joined_data.drop(['year_x', 'year_y'], axis=1)
             
             return joined_data
         except Exception as e:
