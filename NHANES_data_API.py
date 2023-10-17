@@ -75,8 +75,9 @@ class NHANESDataAPI:
 
         try:
             variable_table = pd.read_html(url)[0]  # Assuming the table is the first one on the page
-        except (ValueError, IndexError):
+        except (ValueError, IndexError) as e:
             # If no tables are found, return None
+            print(f"Exception raised: {type(e).__name__} - {str(e)}")
             return None
 
         if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
@@ -185,19 +186,26 @@ class NHANESDataAPI:
 
         Returns a list of valid cycle years or an empty list if the input is not recognized.
         """
+        if not isinstance(input_cycle, list):
+            input_cycle = [input_cycle]  # Convert a single cycle year into a list
         valid_cycles = []
 
-        if isinstance(input_cycle, list):
-            for element in input_cycle:
-                valid_cycles.extend(self._check_cycle(element))
-        elif isinstance(input_cycle, str):
-            if '-' in input_cycle:
-                start_year, end_year = input_cycle.split('-')
-                valid_cycles.extend(self._check_in_between_cycle(start_year, end_year))
-            elif input_cycle in self.cycle_list:
-                valid_cycles.append(input_cycle)
+        for cycle in input_cycle:
+            if isinstance(cycle, str):
+                if '-' in cycle:
+                    start_year, end_year = cycle.split('-')
+                    valid_cycles.extend(self._check_in_between_cycle(start_year, end_year))
+                elif cycle in self.cycle_list:
+                    valid_cycles.append(cycle)
+                else:
+                    for cycle_year in self.cycle_list:
+                        if cycle in cycle_year:
+                            valid_cycles.append(cycle_year)
 
         return valid_cycles
+
+    
+
 
     def _check_in_between_cycle(self, start_year, end_year):
         """
