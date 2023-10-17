@@ -2,6 +2,33 @@ import os
 import pandas as pd
 
 class NHANESDataAPI:
+    """
+    NHANESDataAPI provides an interface for accessing and manipulating data from the National Health and Nutrition Examination Survey (NHANES).
+
+    The NHANES dataset consists of various data categories collected over multiple cycles. This API allows users to retrieve data by specifying data categories, cycle years, and data file descriptions, and perform common data operations.
+
+    Args:
+    data_directory (str, optional): The directory where data will be stored or retrieved. Defaults to 'data/'.
+
+    Attributes:
+    cycle_list (list of str): A list of available NHANES cycle years.
+    data_category_list (list of str): A list of available NHANES data categories.
+
+    Methods:
+    - list_data_categories(): List the available NHANES data categories.
+    - list_cycle_years(): List the available NHANES cycle years.
+    - _retrieve_variable_table(data_category): Retrieve the variable table for a specific data category.
+    - list_file_names(data_category, cycle_years=None): Get a list of unique values in the 'Data File Description' column for a specific data category and optional cycle years.
+    - retrieve_cycle_data_file_name_mapping(data_category, file_name): Retrieve a dictionary of years and Data File Names based on a given "Data File Description."
+    - _check_cycle(input_cycle): Check the validity of a cycle and return valid cycle(s) based on input.
+    - _check_in_between_cycle(start_year, end_year): Check for valid cycles within a range.
+    - _get_data_filename(data_category, cycle_year, data_file_description): Get the data file name for a specific cycle year and data file description.
+    - get_common_and_uncommon_variables(data_category, cycle_years): Find common and uncommon variables across multiple cycle years for a specific data category.
+    - retrieve_data(data_category, cycle, filename, include_uncommon_variables=True, specific_variables=None): Retrieve data for a specific data category, cycle year(s), and data file description.
+    - join_data_files(cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True): Join two data files from specified data categories and file names based on the common variable SEQN.
+
+    """
+
     cycle_list = [
         '1999-2000',
         '2001-2002',
@@ -51,13 +78,6 @@ class NHANESDataAPI:
         """
         return self.cycle_list
 
-
-
-
-
-
-
-
     def _retrieve_variable_table(self, data_category):
         """
         Retrieve the variable table for a specific data category.
@@ -98,8 +118,6 @@ class NHANESDataAPI:
             variable_table['Data File Description'] = 'Demographic Variables & Sample Weights'
 
         return variable_table
-
-
 
 
     def list_file_names(self, data_category, cycle_years=None):
@@ -216,7 +234,7 @@ class NHANESDataAPI:
         end_year (str): The end year of the range.
 
         Returns:
-        list: List of valid cycle(s) within the range.
+        list: List of valid cycle(s) within the specified range or an empty list if no valid cycles are found.
         """
         valid_cycles = []
         found_start = False
@@ -242,7 +260,7 @@ class NHANESDataAPI:
         data_file_description (str): The data file description.
 
         Returns:
-        str: The data file name.
+        str: The data file name or None if no match is found.
         
         Raises:
         ValueError: If no matching data file name is found.
@@ -379,17 +397,17 @@ class NHANESDataAPI:
         Retrieve data for a specific data category, cycle year(s), and data file description.
 
         Args:
-        data_category (str): The data category for which data is requested.
-        cycle (str or list): The year or cycle(s) for which data is requested.
-        filename (str): The data file description.
-        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the concatenated data.
+        data_category (str): The data category for which you want to retrieve data.
+        cycle (str or list): The cycle year(s) for which you want to retrieve data.
+        filename (str): The data file description for which you want to retrieve data.
+        include_uncommon_variables (bool, optional): Whether to include uncommon variables. Defaults to True.
+        specific_variables (list of str, optional): List of specific variables to retrieve. Defaults to None, meaning all variables will be retrieved.
 
         Returns:
-        pd.DataFrame: The retrieved data as a pandas DataFrame containing concatenated data from multiple cycles.
-        The DataFrame will include a 'year' column indicating the cycle year for each row.
+        pd.DataFrame: A pandas DataFrame containing the retrieved data.
 
         Raises:
-        ValueError: If there is an error fetching the data or if no data is available.
+        Exception: If there is an error retrieving the data.
         """
         cycle_list = self._check_cycle(cycle)
         if not cycle_list:
@@ -437,18 +455,18 @@ class NHANESDataAPI:
         Join two data files from specified data categories and file names based on the common variable SEQN.
 
         Args:
-        cycle_year (str): The year or cycle for which data is requested.
-        data_category1 (str): The first data category for the first file.
-        file_name1 (str): The data file description for the first file.
-        data_category2 (str): The second data category for the second file.
-        file_name2 (str): The data file description for the second file.
-        include_uncommon_variables (bool, optional): Whether to include uncommon variables in the joined data.
+        cycle_year (str): The cycle year to retrieve data.
+        data_category1 (str): The first data category to retrieve data from.
+        file_name1 (str): The data file description for the first data file.
+        data_category2 (str): The second data category to retrieve data from.
+        file_name2 (str): The data file description for the second data file.
+        include_uncommon_variables (bool, optional): Whether to include uncommon variables. Defaults to True.
 
         Returns:
-        pd.DataFrame: The joined data as a pandas DataFrame.
+        pd.DataFrame: A pandas DataFrame containing the joined data.
 
         Raises:
-        ValueError: If there is an error fetching the data, if the specified data file names are not available, or if no data is available.
+        Exception: If there is an error joining the data or if data retrieval fails for either of the data categories.
         """
         try:
             # Check if the specified data file names are available in the given cycle year
