@@ -53,6 +53,15 @@ nhanes_api = NHANESDataAPI()
 
 ```
 
-## 3. API Reference <a name="api-reference"></a>
+### 3. API Reference <a name="api-reference"></a>
 
 ### 3.1 NHANESDataAPI Class <a name="nhanesdataapi-class"></a>
+
+#### 3.1.1 Initialization <a name="initialization"></a>
+
+##### `NHANESDataAPI(data_directory="data/")`
+Initialize the NHANESDataAPI.
+
+- `data_directory` (str, optional): Directory where data will be stored (default is "data/").
+
+> **Note:** The initialization of the `NHANESDataAPI` class with `data_directory` is not necessary for users to start utilizing the tool. You can directly create an instance of the class as shown in the [Quick Start](#quick-start) section.
