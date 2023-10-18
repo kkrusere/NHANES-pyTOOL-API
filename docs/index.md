@@ -16,13 +16,20 @@
       - [Retrieve Data](#retrieve-data)
       - [Join Data Files](#join-data-files)
 4. [Examples](#examples)
-   - [List Data Categories](#list-data-categories-example)
-   - [List Cycle Years](#list-cycle-years-example)
-   - [Retrieve Data](#retrieve-data-example)
-   - [Join Data Files](#join-data-files-example)
-5. [Unit Tests](#unit-tests)
-6. [Contributing](#contributing)
-7. [License](#license)
+   - [List Operations](#list-operations)
+      - [List Data Categories and Cycle Years](#list-data-categories-and-cycle-years)
+      - [List File Names](#list-file-names-example)
+   - [Data Retrieval](#data-retrieval)
+      - [Retrieve Cycle Data File Name Mapping](#retrieve-cycle-data-file-name-mapping-example)
+      - [Get Common and Uncommon Variables](#get-common-and-uncommon-variables-example)
+      - [Retrieve Data](#retrieve-data-example)
+      - [Join Data Files](#join-data-files-example)
+5. [Troubleshooting](#troubleshooting)
+   - [Error Handling](#error-handling)
+   - [Error Messages](#error-messages)
+6. [Unit Tests](#unit-tests)
+7. [Contributing](#contributing)
+8. [License](#license)
 
 ## 1. Introduction <a name="introduction"></a>
 The NHANES Data 'API' is a Python library designed to simplify the process of accessing and analyzing data from the National Health and Nutrition Examination Survey (NHANES). NHANES is a program of studies conducted by the National Center for Health Statistics (NCHS), part of the Centers for Disease Control and Prevention (CDC), to assess the health and nutritional status of adults and children in the United States.
@@ -160,40 +167,156 @@ Join two data files from specified data categories and file names based on the c
 - `include_uncommon_variables` (bool, optional): Whether to include uncommon variables when joining data files (default is `True`).
 
 
-### 3.2 Examples <a name="examples"></a>
+### 4 Examples <a name="examples"></a>
 
-#### 3.2.1 List Data Categories and Cycle Years <a name="list-data-categories-and-cycle-years"></a>
+### 4.1 List Operations <a name="list-operations"></a>
+
+#### 4.1.1 List Data Categories and Cycle Years <a name="list-data-categories-and-cycle-years"></a>
 
 ```python
 from NHANES_data_API import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
-api = NHANESDataAPI()
+nhanes_api = NHANESDataAPI()
 
 # List available data categories
 data_categories = api.list_data_categories()
 print("Data Categories:", data_categories)
 
 # List available cycle years
-cycle_years = api.list_cycle_years()
+cycle_years = nhanes_api.list_cycle_years()
 print("Cycle Years:", cycle_years)
 ```
 
-#### 3.2.2 List File Names <a name="list-file-names-example"></a>
+#### 4.1.2 List File Names <a name="list-file-names-example"></a>
 
 ```python
 from NHANES_data_API import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
-api = NHANESDataAPI()
+nhanes_api = NHANESDataAPI()
 
 # Specify the data category and cycle years (optional)
 data_category = "examination"
 cycle_years = ["2005-2006", "2007-2008"]
 
 # List unique data file descriptions
-file_names = api.list_file_names(data_category, cycle_years)
+file_names = nhanes_api.list_file_names(data_category, cycle_years)
 print("Unique Data File Descriptions:", file_names)
+```
 
+### 4.2 Data Retrieval <a name="data-retrieval"></a>
+
+#### 4.2.1 Retrieve Cycle Data File Name Mapping <a name="retrieve-cycle-data-file-name-mapping-example"></a>
+
+```python
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+nhanes_api = NHANESDataAPI()
+
+# Specify the data category and file name
+data_category = "examination"
+file_name = "Body Measures"
+
+# Retrieve a dictionary of years and Data File Names
+file_name_mapping = nhanes_api.retrieve_cycle_data_file_name_mapping(data_category, file_name)
+print("Cycle Data File Name Mapping:", file_name_mapping)
 
 ```
+
+#### 4.2.2 Get Common and Uncommon Variables <a name="get-common-and-uncommon-variables-example"></a>
+```python
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+nhanes_api = NHANESDataAPI()
+
+# Specify the data category and cycle years
+data_category = "examination"
+cycle_years = ["2005-2006", "2007-2008"]
+
+# Find common and uncommon variables
+common_variables, uncommon_variables, variable_cycles_dict = nhanes_api.get_common_and_uncommon_variables(data_category, cycle_years)
+print("Common Variables:", common_variables)
+print("Uncommon Variables:", uncommon_variables)
+print("Variable Cycles Dictionary:", variable_cycles_dict)
+
+```
+
+#### 4.2.3 Retrieve Data <a name="retrieve-data-example"></a>
+
+```python 
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+nhanes_api = NHANESDataAPI()
+
+# Specify the data category, cycle year, and data file description
+data_category = "examination"
+cycle = "2005-2006"
+file_name = "Body Measures"
+
+# Retrieve data
+data = nhanes_api.retrieve_data(data_category, cycle, file_name)
+print("Retrieved Data:")
+print(data.head())
+
+```
+
+#### 4.2.4 Join Data Files <a name="join-data-files-example"></a>
+```python
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+nhanes_api = NHANESDataAPI()
+
+# Specify the cycle year, data categories, and file names
+cycle_year = "2005-2006"
+data_category1 = "examination"
+file_name1 = "Body Measures"
+data_category2 = "demographics"
+file_name2 = "Demographic Variables & Sample Weights"
+
+# Join data files
+joined_data = nhanes_api.join_data_files(cycle_year, data_category1, file_name1, data_category2, file_name2)
+print("Joined Data:")
+print(joined_data.head())
+
+```
+
+
+### 5. Troubleshooting <a name="troubleshooting"></a>
+
+#### 5.1 Handling Errors <a name="error-handling"></a>
+
+The NHANES Data API includes error handling to manage various issues that might arise during usage. Below are some common error scenarios and how they are handled:
+
+- **Data Category Not Found:** If you specify an invalid or unrecognized data category, the API will raise an exception indicating that the data category is not recognized.
+
+- **Invalid Cycle Year:** If you provide an invalid cycle year or range of years, the API will raise a ValueError, indicating that the cycle is invalid. It will also suggest valid cycle years for your reference.
+
+- **Data File Not Found:** If you request data from a specific data file description that is not available for a given data category and cycle year, the API will raise a ValueError. It will inform you that the data file name is not available in the specified cycle year and data category.
+
+- **No Data Available:** If there is no data available for the specified data category, cycle year, and file name, the API will raise a ValueError indicating that no data is available for the provided criteria.
+
+- **Variable Table Format Change:** If the structure of the variable table on the NHANES website changes, the API may raise an exception. You will need to update the code to match the new format.
+
+#### 5.2 Error Messages <a name="error-messages"></a>
+
+Here are some common error messages you may encounter when using the NHANES Data API:
+
+- "Data category not recognized. Please provide a valid data category."
+
+- "Invalid cycle year. Please provide a valid cycle year."
+
+- "Data file name not available in the specified cycle year and data category."
+
+- "No data available for the specified criteria."
+
+- "Error fetching variable table from the NHANES website."
+
+- "The structure of the variable table has changed. Please update the code accordingly."
+
+
+
