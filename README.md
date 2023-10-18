@@ -4,11 +4,14 @@ The NHANES Data API is a Python library that provides a convenient interface for
 
 ## Features
 
-- Retrieve data for specific data categories, cycle years, and data file descriptions.
-- Find common and uncommon variables across multiple cycle years for a specific data category.
-- Join data files from different data categories based on a common variable.
-- List available data categories and cycle years.
-- Explore unique data file descriptions for a specific data category and cycle years.
+- **List Data Categories:** Retrieve a list of available NHANES data categories.
+- **List Cycle Years:** Get a list of available NHANES cycle years.
+- **Retrieve Variable Tables:** Fetch variable tables for specific data categories.
+- **Get Data File Descriptions:** Obtain unique data file descriptions for a given data category and cycle years.
+- **Retrieve Data:** Fetch data for specific data categories, cycle years, and data file descriptions.
+- **Join Data Files:** Join data files based on common variables.
+- **Find Common and Uncommon Variables:** Identify common and uncommon variables across multiple cycle years.
+
 
 ## Installation
 
@@ -18,24 +21,9 @@ To install the NHANES Data API, use `pip`:
 pip install nhanes-data-api
 ```
 
-## Getting Started
-
-```python
-from nhanes_data_api import NHANESDataAPI
-
-# Initialize the NHANES Data API
-api = NHANESDataAPI()
-
-# Example usage
-data_categories = api.list_data_categories()
-cycle_years = api.list_cycle_years()
-# ... (see documentation for more examples)
-
-```
-
 ## Documentation
 
-For detailed information on how to use the NHANES Data API, check out the official documentation.
+For detailed information on how to use the NHANES Data API, check out the [documentation](https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md).
 
 ## Contributing
 
