@@ -158,3 +158,24 @@ Join two data files from specified data categories and file names based on the c
 - `data_category2` (str): The second data category.
 - `file_name2` (str): The "Data File Description" for the second data category.
 - `include_uncommon_variables` (bool, optional): Whether to include uncommon variables when joining data files (default is `True`).
+
+
+### 3.2 Examples <a name="examples"></a>
+
+#### 3.2.1 List Data Categories and Cycle Years <a name="list-data-categories-and-cycle-years"></a>
+
+```python
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+api = NHANESDataAPI()
+
+# List available data categories
+data_categories = api.list_data_categories()
+print("Data Categories:", data_categories)
+
+# List available cycle years
+cycle_years = api.list_cycle_years()
+print("Cycle Years:", cycle_years)
+```
+
