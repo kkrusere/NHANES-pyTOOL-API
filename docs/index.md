@@ -179,3 +179,21 @@ cycle_years = api.list_cycle_years()
 print("Cycle Years:", cycle_years)
 ```
 
+#### 3.2.2 List File Names <a name="list-file-names-example"></a>
+
+```python
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI
+api = NHANESDataAPI()
+
+# Specify the data category and cycle years (optional)
+data_category = "examination"
+cycle_years = ["2005-2006", "2007-2008"]
+
+# List unique data file descriptions
+file_names = api.list_file_names(data_category, cycle_years)
+print("Unique Data File Descriptions:", file_names)
+
+
+```
