@@ -37,3 +37,22 @@ To install the NHANES Data API, you can use pip:
 
 ```bash
 pip install NHANES-Data-API
+```
+### 2.2 Quick Start <a name="quick-start"></a>
+You can get started quickly with the NHANES Data API by following these steps:
+
+```python
+
+from NHANES_data_API import NHANESDataAPI
+
+# Initialize the NHANESDataAPI object
+nhanes_api = NHANESDataAPI()
+
+# Explore NHANES data
+# ...
+
+```
+
+## 3. API Reference <a name="api-reference"></a>
+
+### 3.1 NHANESDataAPI Class <a name="nhanesdataapi-class"></a>
