@@ -27,9 +27,6 @@
 5. [Troubleshooting](#troubleshooting)
    - [Error Handling](#error-handling)
    - [Error Messages](#error-messages)
-6. [Unit Tests](#unit-tests)
-7. [Contributing](#contributing)
-8. [License](#license)
 
 ## 1. Introduction <a name="introduction"></a>
 The NHANES Data 'API' is a Python library designed to simplify the process of accessing and analyzing data from the National Health and Nutrition Examination Survey (NHANES). NHANES is a program of studies conducted by the National Center for Health Statistics (NCHS), part of the Centers for Disease Control and Prevention (CDC), to assess the health and nutritional status of adults and children in the United States.
