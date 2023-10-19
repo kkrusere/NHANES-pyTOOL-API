@@ -6,19 +6,33 @@ setup(
     author="Kuzi Rusere",
     author_email="kkrusere@gmail.com",
     description="A tool for programmatic access to NHANES downloadable datasets",
-    long_description=open("README.md").read(),
-    long_description_content_type="text/markdown",
+    long_description="See README.md for details",
     url="https://github.com/kkrusere/NHANES-Data-API",
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "Operating System :: OS Independent",
     ],
     packages=find_packages(),
-    python_requires=">=3.10",
+    python_requires=">=3.11",
     install_requires=[
         "numpy==1.26.0",
-        "pandas==2.1.1"
+        "pandas==2.1.1",
     ],
+    project_urls={
+        "Documentation": "https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md",
+        "Bug Tracker": "https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md",
+    },
+
+    packages=find_packages(exclude=['tests']),  # Exclude 'tests' directory
+    python_requires=">=3.11",
+    install_requires=[
+        "numpy==1.26.0",
+        "pandas==2.1.1",
+    ],
+    package_data={'': ['*.md']},  # Include all .md files
+    extras_require={
+        'test': ['pytest']
+    },
 )
