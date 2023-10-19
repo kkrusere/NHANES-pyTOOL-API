@@ -20,7 +20,6 @@ setup(
         "numpy",
         "pandas",
     ],
-    package_data={'': ['*.md']},  # Include all .md files
     extras_require={
         'test': ['pytest']
     },

@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: NHANES-DATA-API
+Version: 0.1.0
+Summary: A tool for programmatic access to NHANES downloadable datasets
+Home-page: https://github.com/kkrusere/NHANES-Data-API
+Author: Kuzi Rusere
+Author-email: kkrusere@gmail.com
+Project-URL: Documentation, https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md
+Project-URL: Bug Tracker, https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+
+See README.md for details
