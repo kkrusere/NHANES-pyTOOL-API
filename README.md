@@ -23,6 +23,14 @@ To install the NHANES Data API, use `pip`:
 pip install nhanes-data-api
 ```
 
+
+
+# Important Note
+
+**Attention:** In the current version of the NHANES Data API (version X.X.X), we do not provide a command-line interface (CLI) for direct use from the terminal. This means that you cannot run the API from the command line to access NHANES data. Instead, the API is designed for use as a library in Python scripts or applications.
+###### Future Updates - We are continuously improving the NHANES Data API, and in future versions, we may consider adding a command-line interface for easier interaction with the API from the terminal. Until then, please use the API in your Python scripts or applications.
+
+
 ## Documentation
 
 For detailed information on how to use the NHANES Data API, check out the [documentation](https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md).
