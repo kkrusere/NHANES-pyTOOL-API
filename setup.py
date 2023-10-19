@@ -17,22 +17,15 @@ setup(
     packages=find_packages(),
     python_requires=">=3.11",
     install_requires=[
-        "numpy==1.26.0",
-        "pandas==2.1.1",
-    ],
-    project_urls={
-        "Documentation": "https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md",
-        "Bug Tracker": "https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md",
-    },
-
-    packages=find_packages(exclude=['tests']),  # Exclude 'tests' directory
-    python_requires=">=3.11",
-    install_requires=[
-        "numpy==1.26.0",
-        "pandas==2.1.1",
+        "numpy",
+        "pandas",
     ],
     package_data={'': ['*.md']},  # Include all .md files
     extras_require={
         'test': ['pytest']
+    },
+    project_urls={
+        "Documentation": "https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md",
+        "Bug Tracker": "https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md",
     },
 )
