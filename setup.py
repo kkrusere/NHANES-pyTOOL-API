@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 # Read the content of the README.md file
-with open("README.md", "r", encoding="utf-8") as fh:
+with open("NHANES-DATA-API/README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
@@ -16,11 +16,11 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",  # Updated Python version requirement
         "Operating System :: OS Independent",
     ],
     packages=find_packages(),
-    python_requires=">=3.6",
+    python_requires=">=3.8",  # Minimum Python version is 3.8
     install_requires=[
         "numpy",
         "pandas",
