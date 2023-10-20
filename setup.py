@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="NHANES-DATA-API",
-    version="0.1.1",
+    version="0.1.2",
     author="Kuzi Rusere",
     author_email="kkrusere@gmail.com",
     description="A tool for programmatic access to NHANES downloadable datasets",
@@ -20,7 +20,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     packages=find_packages(),
-    python_requires=">=3.11",
+    python_requires=">=3.6",
     install_requires=[
         "numpy",
         "pandas",
