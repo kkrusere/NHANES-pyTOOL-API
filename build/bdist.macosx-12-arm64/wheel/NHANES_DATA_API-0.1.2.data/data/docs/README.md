@@ -1,24 +1,3 @@
-Metadata-Version: 2.1
-Name: NHANES-DATA-API
-Version: 0.1.2
-Summary: A tool for programmatic access to NHANES downloadable datasets
-Home-page: https://github.com/kkrusere/NHANES-Data-API
-Author: Kuzi Rusere
-Author-email: kkrusere@gmail.com
-Project-URL: Documentation, https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md
-Project-URL: Bug Tracker, https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md
-Classifier: Development Status :: 4 - Beta
-Classifier: License :: OSI Approved :: MIT License
-Classifier: Programming Language :: Python :: 3.6
-Classifier: Operating System :: OS Independent
-Requires-Python: >=3.6
-Description-Content-Type: text/markdown
-License-File: LICENSE
-Requires-Dist: numpy
-Requires-Dist: pandas
-Provides-Extra: test
-Requires-Dist: pytest; extra == "test"
-
 # NHANES Data API
 
 The NHANES Data 'API' is a Python library designed to simplify the process of accessing and analyzing data from the National Health and Nutrition Examination Survey (NHANES). NHANES is a program of studies conducted by the National Center for Health Statistics (NCHS), part of the Centers for Disease Control and Prevention (CDC), to assess the health and nutritional status of adults and children in the United States.
