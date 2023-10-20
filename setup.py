@@ -16,7 +16,7 @@ setup(
     classifiers=[
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.6",
         "Operating System :: OS Independent",
     ],
     packages=find_packages(),
