@@ -47,7 +47,7 @@ You can get started quickly with the NHANES Data API by following these steps:
 
 ```python
 
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI object
 nhanes_api = NHANESDataAPI()
@@ -188,7 +188,7 @@ print("Cycle Years:", cycle_years)
 #### 4.1.2 List File Names <a name="list-file-names-example"></a>
 
 ```python
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
@@ -207,7 +207,7 @@ print("Unique Data File Descriptions:", file_names)
 #### 4.2.1 Retrieve Cycle Data File Name Mapping <a name="retrieve-cycle-data-file-name-mapping-example"></a>
 
 ```python
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
@@ -224,7 +224,7 @@ print("Cycle Data File Name Mapping:", file_name_mapping)
 
 #### 4.2.2 Get Common and Uncommon Variables <a name="get-common-and-uncommon-variables-example"></a>
 ```python
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
@@ -244,7 +244,7 @@ print("Variable Cycles Dictionary:", variable_cycles_dict)
 #### 4.2.3 Retrieve Data <a name="retrieve-data-example"></a>
 
 ```python 
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
@@ -263,7 +263,7 @@ print(data.head())
 
 #### 4.2.4 Join Data Files <a name="join-data-files-example"></a>
 ```python
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
