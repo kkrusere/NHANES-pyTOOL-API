@@ -1,9 +1,0 @@
-LICENSE.txt
-README.md
-setup.py
-src/nhanes_pytool_api.egg-info/PKG-INFO
-src/nhanes_pytool_api.egg-info/SOURCES.txt
-src/nhanes_pytool_api.egg-info/dependency_links.txt
-src/nhanes_pytool_api.egg-info/requires.txt
-src/nhanes_pytool_api.egg-info/top_level.txt
-tests/test_nhanes_data_api.py

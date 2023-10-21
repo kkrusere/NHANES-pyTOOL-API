@@ -1,6 +1,6 @@
 import unittest
 import pandas as pd
-from nhanes_pytool_api.src.nhanes_data_api import NHANESDataAPI  # Import from the src directory
+from nhanes_pytool_api.nhanes_data.nhanes_data_api import NHANESDataAPI  # Import from the src directory
 
 
 class TestNHANESDataAPI(unittest.TestCase):
