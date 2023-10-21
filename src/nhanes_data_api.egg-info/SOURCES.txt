@@ -1,0 +1,14 @@
+LICENSE
+MANIFEST.in
+README.md
+setup.cfg
+setup.py
+src/NHANES Data API/README.md
+src/NHANES Data API/__init__.py
+src/NHANES Data API/nhanes_data_api.py
+src/nhanes_data_api.egg-info/PKG-INFO
+src/nhanes_data_api.egg-info/SOURCES.txt
+src/nhanes_data_api.egg-info/dependency_links.txt
+src/nhanes_data_api.egg-info/requires.txt
+src/nhanes_data_api.egg-info/top_level.txt
+test/test_nhanes_data_api.py
