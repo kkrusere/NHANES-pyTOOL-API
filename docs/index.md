@@ -1,4 +1,4 @@
-# NHANES Data API Documentation
+## NHANES Data API Documentation
 
 ## Table of Contents
 1. [Introduction](#introduction)
