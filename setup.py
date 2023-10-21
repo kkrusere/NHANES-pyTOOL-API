@@ -1,12 +1,12 @@
 from setuptools import setup, find_packages
 
 # Read the content of the README.md file
-with open("NHANES-DATA-API/README.md", "r", encoding="utf-8") as fh:
+with open("src/NHANES Data API/README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="NHANES-DATA-API",
-    version="0.1.2",
+    version="0.1.3",
     author="Kuzi Rusere",
     author_email="kkrusere@gmail.com",
     description="A tool for programmatic access to NHANES downloadable datasets",
@@ -28,8 +28,8 @@ setup(
     extras_require={
         'test': ['pytest']
     },
-    project_urls={
-        "Documentation": "https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md",
-        "Bug Tracker": "https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md",
-    },
+    # project_urls={
+    #     "Documentation": "https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md",
+    #     "Bug Tracker": "https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md",
+    # },
 )

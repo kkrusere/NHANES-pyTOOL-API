@@ -2,3 +2,4 @@ Makefile
 make.bat
 index.rst
 conf.py
+.DS_Store
