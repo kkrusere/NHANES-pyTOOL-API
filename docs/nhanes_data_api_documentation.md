@@ -324,7 +324,7 @@ Here are some common error messages you may encounter when using the NHANES Data
 
 ## Additional Resources
 
-For more details on how to use the NHANES Data API, please refer to the official API documentation on our GitHub repository: API [Documentation](https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md).
+For more details on how to use the NHANES Data API, please refer to the official API documentation on our GitHub repository: API [Documentation](https://kkrusere.github.io/NHANES-Data-API/).
 
 For reporting issues or requesting new features, please visit our [Bug Tracker](https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md).
 
@@ -334,5 +334,5 @@ Contributions are welcome! For major changes, please open an issue first to disc
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-Data-API/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-Data-API/blob/main/LICENSE.txt) file for details.
 

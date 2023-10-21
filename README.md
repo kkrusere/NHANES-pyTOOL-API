@@ -33,7 +33,7 @@ pip install nhanes_data_api
 
 ## Documentation
 
-For detailed information on how to use the NHANES Data API, check out the [documentation](https://github.com/kkrusere/NHANES-Data-API/blob/main/docs/index.md).
+For detailed information on how to use the NHANES Data API, check out the [documentation](https://kkrusere.github.io/NHANES-Data-API/).
 
 ## Contributing
 
@@ -41,4 +41,4 @@ Contributions are welcome! For major changes, please open an issue first to disc
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-Data-API/blob/main/LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-Data-API/blob/main/LICENSE.txt) file for details.
