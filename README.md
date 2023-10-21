@@ -20,7 +20,7 @@ This 'API' provides an easy-to-use interface for retrieving NHANES datasets, all
 To install the NHANES Data API, use `pip`:
 
 ```bash
-pip install nhanes-data-api
+pip install nhanes_data_api
 ```
 
 
