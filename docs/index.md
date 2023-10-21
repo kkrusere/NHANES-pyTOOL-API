@@ -171,7 +171,7 @@ Join two data files from specified data categories and file names based on the c
 #### 4.1.1 List Data Categories and Cycle Years <a name="list-data-categories-and-cycle-years"></a>
 
 ```python
-from NHANES_data_API import NHANESDataAPI
+from nhanes_data.nhanes_data_api import NHANESDataAPI
 
 # Initialize the NHANESDataAPI
 nhanes_api = NHANESDataAPI()
