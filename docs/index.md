@@ -40,7 +40,7 @@ This 'API' provides an easy-to-use interface for retrieving NHANES datasets, all
 To install the NHANES Data API, you can use pip:
 
 ```bash
-pip install nhanes_data_api
+pip install nhanes_pytool_api
 ```
 ### 2.2 Quick Start <a name="quick-start"></a>
 You can get started quickly with the NHANES Data API by following these steps:
@@ -324,9 +324,9 @@ Here are some common error messages you may encounter when using the NHANES Data
 
 ## Additional Resources
 
-For more details on how to use the NHANES Data API, please refer to the official API documentation on our GitHub repository: API [Documentation](https://kkrusere.github.io/NHANES-Data-API/).
+For more details on how to use the NHANES Data API, please refer to the official API documentation on our GitHub repository: API [Documentation](https://kkrusere.github.io/NHANES-pyTOOL-API/).
 
-For reporting issues or requesting new features, please visit our [Bug Tracker](https://github.com/kkrusere/NHANES-Data-API/blob/main/issues/NHANE-DATA-API_issues.md).
+For reporting issues or requesting new features, please visit our [Bug Tracker](https://github.com/kkrusere/NHANES-pyTOOL-API/blob/main/issues/NHANE-pyTOOL-API_issues.md).
 
 ## Contributing
 
@@ -334,5 +334,5 @@ Contributions are welcome! For major changes, please open an issue first to disc
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-Data-API/blob/main/LICENSE.txt) file for details.
+This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-pyTOOL-API/blob/main/LICENSE.txt) file for details.
 
