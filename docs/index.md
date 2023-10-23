@@ -1,7 +1,6 @@
 ## NHANES Data API Documentation
 
-[back to GitHub](https://github.com/kkrusere/NHANES-pyTOOL-API)
-[back to PyPI](https://pypi.org/project/nhanes-pytool-api/)
+[GitHub](https://github.com/kkrusere/NHANES-pyTOOL-API) | [PyPI](https://pypi.org/project/nhanes-pytool-api/)
 
 **Attention:** Please take a look at the [Disclaimer](#disclaimer) before using the tool
 
