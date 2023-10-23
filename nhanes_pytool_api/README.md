@@ -30,7 +30,7 @@ pip install nhanes_pytool_api
 
 # Important Note
 
-**Attention:** In the current version of the NHANES pyTOOL API (version 0.1.0), we do not provide a command-line interface (CLI) for direct use from the terminal. This means that you cannot run the API from the command line to access NHANES data. Instead, the API is designed for use as a library in Python scripts or applications.
+**Attention:** In the current version of the NHANES pyTOOL API (version 0.1.1), we do not provide a command-line interface (CLI) for direct use from the terminal. This means that you cannot run the API from the command line to access NHANES data. Instead, the API is designed for use as a library in Python scripts or applications.
 ###### Future Updates - We are continuously improving the NHANES Data API, and in future versions, we may consider adding a command-line interface for easier interaction with the API from the terminal. Until then, please use the API in your Python scripts or applications.
 
 
@@ -41,6 +41,25 @@ For detailed information on how to use the NHANES pyTOOL API, check out the [doc
 ## Contributing
 
 Contributions are welcome! For major changes, please open an issue first to discuss what you would like to change.
+
+
+## GitHub Issue
+
+If you encounter any issues, bugs, or have suggestions for improvements, please use our [GitHub Issue](https://github.com/kkrusere/NHANES-pyTOOL-API/issues). Our development team actively monitors this repository, and this is the recommended way to report problems or suggest enhancements. To help us address your issue effectively, please follow these guidelines:
+
+1. **Search Existing Issues:** Before creating a new issue, please search the existing issues to check if someone has already reported a similar problem or request. If you find a related issue, you can contribute to the existing discussion.
+
+2. **Provide Details:** When reporting a bug, provide as much detail as possible about the problem you encountered. Include information about your environment, code, and any error messages you received. For feature requests, explain your use case and how the proposed feature would benefit the project.
+
+3. **Be Respectful:** Remember to be respectful and constructive in your interactions with other contributors. A positive and collaborative environment helps improve the project for everyone.
+
+4. **Use Labels:** Our issue tracker uses labels to categorize and prioritize issues. These labels help us identify the nature of each issue. You can use labels such as "bug," "enhancement," or "question" to classify your issue.
+
+Our team will review and respond to issues as soon as possible. Thank you for your contributions and feedback!
+
+[**GitHub Issue**](https://github.com/kkrusere/NHANES-pyTOOL-API/issues)
+
+
 
 ## License
 
