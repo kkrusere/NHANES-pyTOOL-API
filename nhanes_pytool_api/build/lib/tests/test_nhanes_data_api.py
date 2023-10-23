@@ -59,7 +59,7 @@ class TestNHANESDataAPI(unittest.TestCase):
         result = self.api._check_cycle(input_cycle)
         self.assertEqual(result, expected_output)
 
-    def test_common_and_uncommon_variables(self):
+    def test_get_common_and_uncommon_variables(self):
         data_category = "demographics"
         cycle_years = ['2009-2010', '2011-2012']
         common, uncommon, variable_cycles_dict = self.api.get_common_and_uncommon_variables(data_category, cycle_years)
