@@ -4,6 +4,9 @@ The NHANES pyTOOL 'API' is a Python library designed to simplify the process of 
 
 This tool provides an easy-to-use interface for retrieving NHANES datasets, allowing researchers, data science professionals, health professionals, developers and other stakeholders to explore NHANES data efficiently, enabling a wide range of health-related analyses and applications.
 
+
+**Attention:** Please take a look at the [Disclaimer](https://kkrusere.github.io/NHANES-pyTOOL-API/#disclaimer) before using the tool
+
 ## Features
 
 - **List Data Categories:** Retrieve a list of available NHANES data categories.
