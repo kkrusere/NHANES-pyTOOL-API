@@ -349,9 +349,7 @@ If you encounter any issues, bugs, or have suggestions for improvements, please 
 
 2. **Provide Details:** When reporting a bug, provide as much detail as possible about the problem you encountered. Include information about your environment, code, and any error messages you received. For feature requests, explain your use case and how the proposed feature would benefit the project.
 
-3. **Be Respectful:** Remember to be respectful and constructive in your interactions with other contributors. A positive and collaborative environment helps improve the project for everyone.
-
-4. **Use Labels:** Our issue tracker uses labels to categorize and prioritize issues. These labels help us identify the nature of each issue. You can use labels such as "bug," "enhancement," or "question" to classify your issue.
+3. **Use Labels:** Our issue tracker uses labels to categorize and prioritize issues. These labels help us identify the nature of each issue. You can use labels such as "bug," "enhancement," or "question" to classify your issue.
 
 Our team will review and respond to issues as soon as possible. Thank you for your contributions and feedback!
 
