@@ -1,5 +1,7 @@
 ## NHANES Data API Documentation
 
+**Attention:** Please take a look at the [Disclaimer](#disclaimer) before using the tool
+
 ### Table of Contents
 1. [Introduction](#introduction)
 2. [Getting Started](#getting-started)
@@ -335,4 +337,60 @@ Contributions are welcome! For major changes, please open an issue first to disc
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](https://github.com/kkrusere/NHANES-pyTOOL-API/blob/main/LICENSE.txt) file for details.
+
+
+
+## Disclaimer <a name="disclaimer"></a>
+
+**Current Limitation**
+
+The NHANES pyTOOL API is designed to work exclusively with NHANES data from pre-pandemic cycle years (1999-2000 to 2017-2018). Please note that the tool does not currently support NHANES data from the COVID-19 pandemic and post-pandemic eras.
+
+**Reasoning**
+
+The COVID-19 pandemic has had a significant impact on NHANES data collection. 
+
+**NHANES data collection during the COVID-19 pandemic**
+
+In March 2020, the NHANES program suspended field operations due to the COVID-19 pandemic. This meant that data collection for the 2019-2020 cycle was not completed. As a result, data collected from 2019 to March 2020 were combined with data from the 2017-2018 cycle to form a nationally representative sample of NHANES 2017-March 2020 pre-pandemic data.
+
+Data collection for the 2019-2022 cycle resumed in September 2020, but with some modifications to reduce the risk of COVID-19 transmission. These modifications included:
+
+* Reducing the number of participants recruited from each location.
+* Implementing additional safety protocols at the MEC, such as requiring masks and social distancing.
+* Offering participants the option to complete the interview and physical examination remotely.
+
+**Impact of the COVID-19 pandemic on NHANES data**
+
+The COVID-19 pandemic has had a number of impacts on NHANES data, including:
+
+* **Reduced sample size:** The sample size for the 2019-2022 cycle is smaller than the sample size for previous cycles. This is due to the suspension of field operations in 2020 and the modifications implemented to reduce the risk of COVID-19 transmission.
+* **Increased variability:** The variability of NHANES estimates may be higher for the 2019-2022 cycle and future cycles due to the smaller sample size and the modifications to data collection procedures.
+* **Data gaps:** There are some data gaps for the 2019-2020 cycle, such as data on COVID-19 infection and vaccination status. These data gaps will be filled as data from the 2019-2022 cycle and future cycles is released.
+
+
+These changes to NHANES data collection make it more difficult to develop and maintain a tool that can reliably work with data from both the pre-pandemic and pandemic eras. For this reason, we have decided to focus on supporting NHANES data from the pre-pandemic cycle years in the first version of the NHANES pyTOOL API.
+
+
+**Future Plans**
+
+We are committed to making the NHANES pyTOOL API the most comprehensive and user-friendly tool for working with NHANES data. To this end, we plan to add support for NHANES data from the COVID-19 pandemic and post-pandemic eras in future versions of the tool. We will also continue to monitor the NHANES data collection process and make updates to the tool as needed.
+
+**Downloading Data**
+
+If you require NHANES data from during the COVID-19 pandemic and post-pandemic eras (2019-2020 +), you can manually download it from the NHANES webpage. Visit the following link: [NHANES Data Download](https://wwwn.cdc.gov/nchs/nhanes/continuousnhanes/default.aspx).
+
+**More Information**
+
+For additional information about NHANES, please visit the official NHANES website: [NHANES Information](https://www.cdc.gov/nchs/nhanes/index.htm).
+
+**User Support**
+
+If you have questions or need support related to the NHANES pyTOOL API, please feel free to contact us.
+
+**Legal Notices**
+
+Before using NHANES data, please ensure that you comply with all legal and usage restrictions associated with NHANES datasets. Please be aware of your responsibilities regarding data usage and distribution.
+
+We apologize for any inconvenience this may cause, and we appreciate your understanding.
 

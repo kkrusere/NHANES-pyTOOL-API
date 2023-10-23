@@ -6,7 +6,7 @@ with open("README.md", "r") as readme_file:
 
 setup(
     name="nhanes_pytool_api",
-    version="0.1.0",
+    version="0.1.1",
     author="Kuzi Rusere",
     author_email="kkrusere@gmail.com",
     description="A tool for programmatic access to NHANES downloadable datasets",
@@ -30,5 +30,8 @@ setup(
     extras_require={
         'test': ['pytest']
     },
-    project_urls={"Documentation": "https://kkrusere.github.io/NHANES-pyTOOL-API/"}
+        project_urls={
+        "Documentation": "https://kkrusere.github.io/NHANES-pyTOOL-API/",
+        "Bug Tracker": "https://github.com/kkrusere/NHANES-pyTOOL-API/issues"
+    }
 )

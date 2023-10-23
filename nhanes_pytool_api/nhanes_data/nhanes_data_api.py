@@ -11,25 +11,25 @@ class NHANESDataAPI:
     data_directory (str, optional): The directory where data will be stored or retrieved. Defaults to 'data/'.
 
     Attributes:
-    cycle_list (list of str): A list of available NHANES cycle years.
-    data_category_list (list of str): A list of available NHANES data categories.
+    __cycle_list (list of str): A list of available NHANES cycle years.
+    __data_category_list (list of str): A list of available NHANES data categories.
 
     Methods:
     - list_data_categories(): List the available NHANES data categories.
     - list_cycle_years(): List the available NHANES cycle years.
     - _retrieve_variable_table(data_category): Retrieve the variable table for a specific data category.
     - list_file_names(data_category, cycle_years=None): Get a list of unique values in the 'Data File Description' column for a specific data category and optional cycle years.
-    - retrieve_cycle_data_file_name_mapping(data_category, file_name): Retrieve a dictionary of years and Data File Names based on a given "Data File Description."
+    - retrieve_cycle_data_file_name_mapping(variable_table, file_name): Retrieve a dictionary of years and Data File Names based on a given "Data File Description."
     - _check_cycle(input_cycle): Check the validity of a cycle and return valid cycle(s) based on input.
     - _check_in_between_cycle(start_year, end_year): Check for valid cycles within a range.
     - _get_data_filename(data_category, cycle_year, data_file_description): Get the data file name for a specific cycle year and data file description.
     - get_common_and_uncommon_variables(data_category, cycle_years): Find common and uncommon variables across multiple cycle years for a specific data category.
-    - retrieve_data(data_category, cycle, filename, include_uncommon_variables=True, specific_variables=None): Retrieve data for a specific data category, cycle year(s), and data file description.
+    - retrieve_data(data_category, cycle, filename, include_uncommon_variables=True): Retrieve data for a specific data category, cycle year(s), and data file description.
     - join_data_files(cycle_year, data_category1, file_name1, data_category2, file_name2, include_uncommon_variables=True): Join two data files from specified data categories and file names based on the common variable SEQN.
 
     """
 
-    cycle_list = [
+    __cycle_list = [
         '1999-2000',
         '2001-2002',
         '2003-2004',
@@ -42,7 +42,7 @@ class NHANESDataAPI:
         '2017-2018'
     ]
 
-    data_category_list = [
+    __data_category_list = [
         "demographics",
         "dietary",
         "examination",
@@ -67,7 +67,7 @@ class NHANESDataAPI:
         Returns:
         list: List of available data categories.
         """
-        return self.data_category_list
+        return self.__data_category_list
     
     def list_cycle_years(self):
         """
@@ -76,7 +76,9 @@ class NHANESDataAPI:
         Returns:
         list: List of available cycle years.
         """
-        return self.cycle_list
+        return self.__cycle_list
+    
+
 
     def _retrieve_variable_table(self, data_category):
         """
@@ -103,7 +105,7 @@ class NHANESDataAPI:
         if "Begin Year" in variable_table.columns and "EndYear" in variable_table.columns:
             variable_table["Years"] = variable_table.apply(lambda row: f"{row['Begin Year']}-{row['EndYear']}", axis=1)
             variable_table.drop(["Begin Year", "EndYear", "Component", "Use Constraints"], axis=1, inplace=True)
-            variable_table = variable_table.loc[variable_table["Years"].isin(self.cycle_list)]
+            variable_table = variable_table.loc[variable_table["Years"].isin(self.__cycle_list)]
 
             if variable_table.empty:
                 # If no matching cycle years are found, return None
@@ -213,10 +215,10 @@ class NHANESDataAPI:
                 if '-' in cycle:
                     start_year, end_year = cycle.split('-')
                     valid_cycles.extend(self._check_in_between_cycle(start_year, end_year))
-                elif cycle in self.cycle_list:
+                elif cycle in self.__cycle_list:
                     valid_cycles.append(cycle)
                 else:
-                    for cycle_year in self.cycle_list:
+                    for cycle_year in self.__cycle_list:
                         if cycle in cycle_year:
                             valid_cycles.append(cycle_year)
 
@@ -239,7 +241,7 @@ class NHANESDataAPI:
         valid_cycles = []
         found_start = False
 
-        for cycle in self.cycle_list:
+        for cycle in self.__cycle_list:
             if start_year in cycle:
                 found_start = True
             if found_start:
@@ -304,7 +306,7 @@ class NHANESDataAPI:
             valid_cycles = valid_cycles + self._check_cycle(cycle)
 
         if valid_cycles == []:
-            raise ValueError(f"You have entered an Invalid cycle. Below is a list of valid cycles: \n {self.cycle_list}")
+            raise ValueError(f"You have entered an Invalid cycle. Below is a list of valid cycles: \n {self.__cycle_list}")
 
         if len(valid_cycles) < 2:
             raise ValueError("There is only one cycle here. This function can only be performed for 2 or more cycle years.")
@@ -409,23 +411,23 @@ class NHANESDataAPI:
         Raises:
         Exception: If there is an error retrieving the data.
         """
-        cycle_list = self._check_cycle(cycle)
-        if not cycle_list:
+        temp_cycle_list = self._check_cycle(cycle)
+        if not temp_cycle_list:
             raise ValueError("Invalid cycle input.")
         
-        if len(cycle_list) == 1:
-            data_file_name = self._get_data_filename(data_category, cycle_list[0], filename)
+        if len(temp_cycle_list) == 1:
+            data_file_name = self._get_data_filename(data_category, temp_cycle_list[0], filename)
             if data_file_name is None:
-                raise ValueError(f"No data file found for Data Category: {data_category}, Year: {cycle_list[0]}, Data File Description: {filename}")
-            data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{cycle_list[0]}/{data_file_name}.XPT")
-            data['year'] = cycle_list[0]
+                raise ValueError(f"No data file found for Data Category: {data_category}, Year: {temp_cycle_list[0]}, Data File Description: {filename}")
+            data = pd.read_sas(f"https://wwwn.cdc.gov/Nchs/Nhanes/{temp_cycle_list[0]}/{data_file_name}.XPT")
+            data['year'] = temp_cycle_list[0]
             return data
 
         data_frames = []  # List to store individual data frames from different cycles
 
-        common_variables, uncommon_variables, _ = self.get_common_and_uncommon_variables(data_category, cycle_list)
+        common_variables, uncommon_variables, _ = self.get_common_and_uncommon_variables(data_category, temp_cycle_list)
 
-        for cycle_year in cycle_list:
+        for cycle_year in temp_cycle_list:
             try:
                 data_file_name = self._get_data_filename(data_category, cycle_year, filename)
                 if data_file_name is None:
