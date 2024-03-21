@@ -472,8 +472,8 @@ class NHANESDataAPI:
         """
         try:
             # Check if the specified data file names are available in the given cycle year
-            data_file_names1 = self.list_data_file_names(data_category1, cycle_year)
-            data_file_names2 = self.list_data_file_names(data_category2, cycle_year)
+            data_file_names1 = self.list_file_names(data_category1, cycle_year)
+            data_file_names2 = self.list_file_names(data_category2, cycle_year)
             
             if file_name1 not in data_file_names1:
                 raise ValueError(f"Data file name '{file_name1}' is not available in the specified cycle year '{cycle_year}' for data category '{data_category1}'.")
